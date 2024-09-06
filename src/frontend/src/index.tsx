@@ -8,11 +8,7 @@ import "./style/index.css";
 import "./App.css";
 import "./style/applies.css";
 
-// @ts-ignore
-import {
-  qiankunWindow,
-  renderWithQiankun,
-} from "vite-plugin-qiankun/dist/helper";
+import { qiankunWindow, renderWithQiankun, } from "vite-plugin-qiankun/dist/helper";
 import App from "./App";
 
 if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
@@ -20,22 +16,19 @@ if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
     document.getElementById("langflow-root") as HTMLElement,
   );
 
-  root.render(
-    <App />
-  );
+  root.render(<App />);
   reportWebVitals();
 } else {
   let root: ReactDOM.Root;
   renderWithQiankun({
     mount(props) {
+      console.log('bob', 'render langflow')
       root = ReactDOM.createRoot(
         (props.container
           ? props.container.querySelector("#langflow-root")
           : document.getElementById("langflow-root")) as HTMLElement,
       );
-      root.render(
-        <App />
-      );
+      root.render(<App />);
     },
     bootstrap() {
       console.log("bootstrap");
