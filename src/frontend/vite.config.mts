@@ -1,7 +1,9 @@
+import { RefreshButton } from "@/components/ui/refreshButton";
 import react from "@vitejs/plugin-react-swc";
 import dotenv from "dotenv";
 import path from "path";
 import { defineConfig } from "vite";
+import qiankun from "vite-plugin-qiankun";
 import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
 import {
@@ -33,6 +35,8 @@ export default defineConfig(({ mode }) => {
     return proxyObj;
   }, {});
 
+  const useDevMode = true;
+
   return {
     basename: (BASENAME || "") + "/",
     build: {
@@ -45,8 +49,18 @@ export default defineConfig(({ mode }) => {
       ),
       "process.env.CI": JSON.stringify(process.env.CI),
     },
-    plugins: [react(), svgr(), tsconfigPaths()],
+    plugins: [
+      react(),
+      svgr(),
+      tsconfigPaths(),
+      qiankun("langflow", {
+        useDevMode,
+      }),
+    ],
+    // 生产环境需要指定运行域名作为base
+    base: "http://localhost:3000/",
     server: {
+      hmr: false,
       port: port,
       proxy: {
         ...proxyTargets,
